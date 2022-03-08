@@ -42,7 +42,7 @@ class Q_Learning:
     def Visual_Map(screen, x_pos, y_pos):
         '''
         Visualize Map as n x n
-        Still Editing
+        Still Editing 
         '''
         c = 0
         for i in range(0,x_pos*100,100):
@@ -52,7 +52,7 @@ class Q_Learning:
                 c+=1
                 pygame.draw.circle(screen,(25,129,230),(Q_Learning.current_pos[1]*100 + 50,Q_Learning.current_pos[0]*100 + 50),30,0)        
 
-    def select_action(current_state, x_pos, y_pos):
+    def Select_Action(current_state, x_pos, y_pos):
         '''
         Making Possible actions basis of current position.
         '''
@@ -109,7 +109,7 @@ class Q_Learning:
         current_state = Learning_Environments.states[(Q_Learning.current_pos[0],Q_Learning.current_pos[1])]
 
         # Get action
-        action = Q_Learning.select_action(current_state, x_pos, y_pos)
+        action = Q_Learning.Select_Action(current_state, x_pos, y_pos)
 
         # Calculate after position
         if action == 0: #move up
@@ -161,7 +161,7 @@ class Learning_Environments:
         # Set States at each Position
         Learning_Environments.Set_State(x_pos, y_pos)     
 
-        # Set Goal
+        # Set Terminals
         Learning_Environments.terminals.append(x_pos*y_pos - 1)
 
         # Initialize q_table
@@ -180,7 +180,7 @@ class Learning_Environments:
         # Initialize reward as Zero
         Learning_Environments.reward = np.zeros( (x_pos,y_pos) )
 
-        # Set Walls, Penalties
+        # Set two Walls, Penalties
         for idx in range(2):
             Learning_Environments.Set_Penalty(x_pos, y_pos)
             Learning_Environments.Set_Wall(x_pos, y_pos)
@@ -226,10 +226,10 @@ class Learning_Environments:
 
 class Do_Maze:
 
-    def __init__(self):
-        Learning_Environments(10, 10)
-        Q_Learning(10, 10)
+    def __init__(self, x_pos, y_pos):
+        Learning_Environments(x_pos, y_pos)
+        Q_Learning(x_pos, y_pos)
 
 if __name__ == "__main__":
-    Do_Maze()
+    Do_Maze(10, 10)
 
