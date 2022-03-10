@@ -2,6 +2,7 @@ from turtle import back
 import numpy as np
 import pygame
 import random
+from pygame.locals import *
 import time
 
 class Q_Learning:
@@ -14,10 +15,14 @@ class Q_Learning:
     actions = {"up": 0,"down" : 1,"left" : 2,"right" : 3} #possible actions
 
     def __init__(self, x_pos, y_pos):
-        screen = pygame.display.set_mode( (x_pos*100, y_pos*100) )
+
+        screen = pygame.display.set_mode( (y_pos*50, x_pos*50), pygame.RESIZABLE )
 
         run = True
         while run:
+
+            # If the ball is too fast...
+            time.sleep(0.05)
             # Setting Map as White
             screen.fill( (0, 0, 0) )
 
@@ -42,15 +47,17 @@ class Q_Learning:
     def Visual_Map(screen, x_pos, y_pos):
         '''
         Visualize Map as n x n
-        Still Editing 
+        Blue => Wall
+        Red => Penalty
         '''
         c = 0
-        for i in range(0,x_pos*100,100):
-            for j in range(0,y_pos*100,100):
-                pygame.draw.rect(screen,(50,50,50),(j,i,j+100,i+100),0)
+        for i in range(0,x_pos*50,50):
+            for j in range(0,y_pos*50,50):
+                
+                pygame.draw.rect(screen,(50,50,50),(j,i,j+50,i+50),0) 
                 pygame.draw.rect(screen,Learning_Environments.colors[c],(j+3,i+3,j+95,i+95),0)
                 c+=1
-                pygame.draw.circle(screen,(25,129,230),(Q_Learning.current_pos[1]*100 + 50,Q_Learning.current_pos[0]*100 + 50),30,0)        
+                pygame.draw.circle(screen,(25,129,230),(Q_Learning.current_pos[1]*50 + 25,Q_Learning.current_pos[0]*50 + 25),20,0)
 
     def Select_Action(current_state, x_pos, y_pos):
         '''
@@ -231,5 +238,5 @@ class Do_Maze:
         Q_Learning(x_pos, y_pos)
 
 if __name__ == "__main__":
-    Do_Maze(10, 10)
+    Do_Maze(10, 20)
 
