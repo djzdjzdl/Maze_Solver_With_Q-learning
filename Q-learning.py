@@ -174,10 +174,11 @@ class Learning_Environments:
         Learning_Environments.Set_State(x_pos, y_pos)
 
         # Set Terminals if  goal => x_pos * y_pos - 1
-        Learning_Environments.terminals.append(x_pos*y_pos - 1)
+#        Learning_Environments.terminals.append(x_pos*y_pos - 1)
 
         # Set Terminals if goal => random
-        #Learning_Environments.terminals.append(Learning_Environments.goal_x_pos * Learning_Environments.goal_y_pos)
+        # (rand_x_pos * (y_pos) ) + rand_y_pos
+        Learning_Environments.terminals.append(Learning_Environments.goal_x_pos * (y_pos) + Learning_Environments.goal_y_pos)
 
         # Initialize q_table
         Learning_Environments.q_table = np.zeros( (x_pos * y_pos, 4))
@@ -201,11 +202,11 @@ class Learning_Environments:
             Learning_Environments.Set_Wall(x_pos, y_pos)
 
         # Set Goals
-#        Learning_Environments.Set_Goal(x_pos, y_pos)
+        Learning_Environments.Set_Goal(x_pos, y_pos)
 
         # If Goal is x_pos-1, y_pos-1
-        Learning_Environments.reward[x_pos-1, y_pos-1] = 1
-        Learning_Environments.colors[x_pos * y_pos - 1] = (0, 255, 0)
+#        Learning_Environments.reward[x_pos-1, y_pos-1] = 1
+#        Learning_Environments.colors[x_pos * y_pos - 1] = (0, 255, 0)
 
     def Set_Penalty(x_pos, y_pos):
         # Randomize some number
@@ -246,9 +247,11 @@ class Learning_Environments:
         rand_x_pos = random.randint(0, x_pos-1)
         rand_y_pos = random.randint(0, y_pos-1)
 
+        print(rand_x_pos + 1, rand_y_pos+ 1)
+
         if Learning_Environments.reward[rand_x_pos, rand_y_pos] == 0 and [rand_x_pos, rand_y_pos] != [0, 0]:
             Learning_Environments.reward[rand_x_pos, rand_y_pos] = 1
-            Learning_Environments.colors[rand_x_pos * rand_y_pos] = (0, 255, 0)
+            Learning_Environments.colors[ (rand_x_pos * (y_pos) ) + rand_y_pos] = (0, 255, 0)
             Learning_Environments.goal_x_pos = rand_x_pos
             Learning_Environments.goal_y_pos = rand_y_pos
         else:
