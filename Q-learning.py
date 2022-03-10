@@ -22,7 +22,8 @@ class Q_Learning:
         while run:
 
             # If the ball is too fast...
-            time.sleep(0.05)
+            #time.sleep(0.05)
+            
             # Setting Map as White
             screen.fill( (0, 0, 0) )
 
@@ -69,7 +70,7 @@ class Q_Learning:
 
         # If random uniform [0, 1] le epsilon
         if np.random.uniform() <= Q_Learning.epsilon:
-
+            
             # Setting up, down, left, right consider of walls position.
             if Q_Learning.current_pos[0] != 0 and [Q_Learning.current_pos[0]-1,Q_Learning.current_pos[1]] not in Learning_Environments.walls:
                 possible_actions.append("up")
@@ -158,6 +159,10 @@ class Learning_Environments:
     # Initialize Q-table
     q_table = np
 
+    # Goal location
+    goal_x_pos = 0
+    goal_y_pos = 0
+
     def __init__(self, x_pos, y_pos):
         # Initialize Colors => x_pos * y_pos 
         Learning_Environments.colors = [(255, 255, 255) for i in range(x_pos*y_pos)]
@@ -166,10 +171,13 @@ class Learning_Environments:
         Learning_Environments.Set_Reward(x_pos, y_pos)
 
         # Set States at each Position
-        Learning_Environments.Set_State(x_pos, y_pos)     
+        Learning_Environments.Set_State(x_pos, y_pos)
 
-        # Set Terminals
+        # Set Terminals if  goal => x_pos * y_pos - 1
         Learning_Environments.terminals.append(x_pos*y_pos - 1)
+
+        # Set Terminals if goal => random
+        #Learning_Environments.terminals.append(Learning_Environments.goal_x_pos * Learning_Environments.goal_y_pos)
 
         # Initialize q_table
         Learning_Environments.q_table = np.zeros( (x_pos * y_pos, 4))
@@ -193,6 +201,9 @@ class Learning_Environments:
             Learning_Environments.Set_Wall(x_pos, y_pos)
 
         # Set Goals
+#        Learning_Environments.Set_Goal(x_pos, y_pos)
+
+        # If Goal is x_pos-1, y_pos-1
         Learning_Environments.reward[x_pos-1, y_pos-1] = 1
         Learning_Environments.colors[x_pos * y_pos - 1] = (0, 255, 0)
 
@@ -230,6 +241,19 @@ class Learning_Environments:
     def Set_Queue(states, i, j):
         states[(i, j)] = Learning_Environments.states_queue
         Learning_Environments.states_queue += 1
+
+    def Set_Goal(x_pos, y_pos):
+        rand_x_pos = random.randint(0, x_pos-1)
+        rand_y_pos = random.randint(0, y_pos-1)
+
+        if Learning_Environments.reward[rand_x_pos, rand_y_pos] == 0 and [rand_x_pos, rand_y_pos] != [0, 0]:
+            Learning_Environments.reward[rand_x_pos, rand_y_pos] = 1
+            Learning_Environments.colors[rand_x_pos * rand_y_pos] = (0, 255, 0)
+            Learning_Environments.goal_x_pos = rand_x_pos
+            Learning_Environments.goal_y_pos = rand_y_pos
+        else:
+            Learning_Environments.Set_Goal(x_pos, y_pos)
+
 
 class Do_Maze:
 
